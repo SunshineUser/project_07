@@ -7,11 +7,9 @@ const {
     createPost,
     updatePost,
     getAllPosts,
-    getPostsByUser,
     createTags,
-    createPostTag,
-    getPostById,
-    addTagsToPost
+    addTagsToPost,
+    getPostsByTagName,
 } = require('./index');
 
 async function createInitialPosts(){
@@ -37,7 +35,7 @@ async function createInitialPosts(){
             authorId: glamgal.id,
             title: "I will absorb the entire universe with my Glamgal powers",
             content: "Do you even? I swear that half of you are posing.",
-            tags: ["#happy","#youcandoanything","#canmandoeverything"]
+            tags: ["#happy","#youcandoanything","#catmandoeverything"]
         });
     
         console.log("Finished created posts!");
@@ -48,16 +46,16 @@ async function createInitialPosts(){
 }
 async function createInitialUsers(){
     try{
-        console.log("Starting to create users...");
+        // console.log("Starting to create users...");
 
         const albert = await createUser({ username: 'albert', password: 'bertie99', name: 'albert', location:'friday'});
         const sandra = await createUser({ username:'sandra', password: 'passwordsarebad',name: 'sandra',location: 'at a bar' });
         const glamgal = await createUser({ username:'glamgal', password: 'glamgalmanderglamgal',name: 'glamgal', location: 'under the stairs'});
         
-        console.log(albert);
-        console.log(sandra);
-        console.log(glamgal);
-        console.log("Finished creating users!");
+        // console.log(albert);
+        // console.log(sandra);
+        // console.log(glamgal);
+        // console.log("Finished creating users!");
 
     } catch(error){
         console.error("Error creating users!")
@@ -170,9 +168,9 @@ async function testDB(){
 
         await createInitialTags();
         const users = await getAllUsers();
-        console.log("not here")
         const posts = await getAllPosts();
         console.log("Calling updatePost on posts[1], only update tags");
+        console.log(posts);
         const updatePostTagsResult = await updatePost(posts[1].id,{
             tags: ["#youcandoanything","#redfish","#bluefish"]
         });
