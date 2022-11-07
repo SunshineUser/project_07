@@ -82,9 +82,9 @@ async function updatePost(postId, fields={}){
         (key, index) => `"${ key }"=$${ index + 1}`
         ).join(', ');
 
-    // if (setString.length === 0){
-    //     return;
-    // }
+    if (setString.length === 0){
+        return;
+    }
     
     try {
 
@@ -274,7 +274,7 @@ async function getPostsByTagName(tagName) {
         SELECT posts.id
         FROM posts
         JOIN post_tags ON posts.id=post_tags."postId"
-        JOIN tags ON tags.id=post_tags."tagsId"
+        JOIN tags ON tags.id=post_tags."tagId"
         WHERE tags.name=$1;
         `, [tagName]);
         return await Promise.all(postIds.map(
