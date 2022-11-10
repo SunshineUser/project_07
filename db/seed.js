@@ -51,7 +51,7 @@ async function createInitialUsers(){
         const albert = await createUser({ username: 'albert', password: 'bertie99', name: 'albert', location:'friday'});
         const sandra = await createUser({ username:'sandra', password: 'passwordsarebad',name: 'sandra',location: 'at a bar' });
         const glamgal = await createUser({ username:'glamgal', password: 'glamgalmanderglamgal',name: 'glamgal', location: 'under the stairs'});
-        
+        const glamgalf = await createUser ({ username: 'glamgalf the glam'})
         // console.log(albert);
         // console.log(sandra);
         // console.log(glamgal);
@@ -62,6 +62,7 @@ async function createInitialUsers(){
         throw error;
     }
 }
+
 async function createInitialTags(){
     try{
         console.log("Starting to create tags... ");
