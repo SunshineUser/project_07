@@ -1,48 +1,106 @@
+// assign port name and call express and assign express to app
+const { client, getUserById } = require('./db/index');
 const PORT = 3000;
 const express = require('express');
 const app = express();
+
+//calling the api router and assigning the json web token and dotenv and morgan .json reader and urlencoded
+
 const morgan = require('morgan')
-const apiRouter = require('./api');
-const { client } = require('./db');
-
-
 app.use(morgan('dev'))
-app.use('/api', apiRouter);
+const jwt = require('jsonwebtoken');
+const { JWT_SECRET } = process.env;
+require('dotenv').config();
 app.use(express.json());
+app.use(express.urlencoded( { extended:false }));
+
+//calling the router
+const apiRouter = require('./api');
+app.use('/api', apiRouter);
+// getUserBy/client from the datatbase
 
 
-
-// app.use((req, res, next) => {
-//     console.log("<____Body Logger START____>");
-//     console.log(req.body);
-//     console.log("<_____Body Logger END_____>");
-  
-//     next();
-// });
+// connect to the client before the app.use 
 client.connect();
-app.use('/',(req,res, next)=>{
+// are we here? if yes, then respond
+// app.use('*',(req,res,next)=>{
+//     console.log("we're looking for errors in the API")
+//     next();
+// })
+
+// app.use((req,res,next)=>{
+//     console.log("Request has been recieved express!")
+//     next();
+// })
+
+// this is the first call that will route all calls from ./. on your website 
+app.get('/',(req,res, next)=>{
+    res.send(`<div>welcome to my website</div>`)
     console.log("Here's my request");
     next();
 })
 
-// app.post('/api/users/register',(req,res,next)=>{
-//     console.log("here's a request to register")
-//     res.send({message: "succcessssss!"})
+
+
+
+
+//jwt.verify() 2 arguments, what is the token, what is the server-side secret
+// async function decryptJWT(req,res,next){
+//     try{
+//         // console.log("this is req.headers" , req.headers);
+//         const authHeader= req.headers.authorization
+
+//         if (!authHeader){
+//             res.send("invalid credentials")
+//             next()
+//         }else{
+//             const slicedToken = authHeader.slice(7);
+//             const { id } = jwt.verify(slicedToken, JWT_SECRET);
+
+//             console.log("this is our id  ", id);
+//             const user = await getUserById(id);
+//             req.user= user;
+//         }
+//         next();
+
+//     }catch(error){
+//         console.log(error)
+//     }
+// }
+// app.use(decryptJWT)
+
+
+
+
+//jwt.sign() create a new json web token 3 arguments, (encryptdata, secret, expiration time ))
+// app.post("/api/users/register", (req,res,next) =>{
+//     try{
+//         let newUserData = req.body;
+
+//         const newToken = jwt.sign({
+//             username: newUserData.username
+//         }, JWT_SECRET,{
+//             expiresIn:"1w"
+//         })
+
+//         console.log('This is my new token '  + newToken)
+//         res.end();
+//     } catch(error){
+//         console.log(error)
+//     }
 // })
 
-// app.post('/api/users/login',(req,res,next)=>{
-//     console.log("here's a request to login")
-//     res.send({message: "succcessssss!"})
+// app.post('/api/users/login', () =>{
+
 // })
 
-// app.post('/api/users/:id',(req,res,next)=>{
-//     console.log("here's a request to get an ID")
-//     res.send({message: "succcessssss!"})
+// app.delete('/api/users/:id', () =>{
+
 // })
 
 
+
+// this is our listen that is listening through the port on the browser
 app.listen(PORT, ()=>{
     console.log('The server is up on port', PORT);
 })
-
- 

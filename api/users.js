@@ -2,14 +2,14 @@ const express =  require('express');
 const usersRouter = express.Router();
 
 //calling get all users
-const {getAllUsers} = require('../db');
-
+const { getAllUsers } = require('../db');
 
 usersRouter.use((req,res,next) =>{
     console.log("a request is being made to /users");
 
-    next();
-});
+    // res.send({ message: 'hello from /users!'})
+    next()
+})
 
 usersRouter.get('/', async(req,res) =>{
     const users = await getAllUsers();

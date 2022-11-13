@@ -10,32 +10,14 @@ async function getAllUsers(){
     return rows;
 }
 
+
+
 async function getAllTags(){
     const { rows } = await client.query(
         `SELECT * FROM tags;`
     )
     console.log("all tags ", rows);
     return rows;
-}
-
-async function createUser({
-    username,
-    password,
-    name,
-    location
-}){
-    try{//interpolated placeholders
-        const { rows:  [ user ] } = await client.query(`
-            INSERT INTO users(username, password, name, location)
-            VALUES ($1, $2, $3, $4)  
-            ON CONFLICT (username) DO NOTHING 
-            RETURNING *;
-            `,
-            [ username, password, name, location]);
-        return user
-    }catch(error){
-        throw (error) //in the trash
-    }
 }
 
 async function updateUser(id, fields = {}){
@@ -295,15 +277,14 @@ async function getPostsByTagName(tagName) {
 }
 module.exports = {
     client,
-    createUser,
     createTags,
     updateUser,
-    getAllUsers,
     getUserById,
     createPost,
     updatePost,
     getAllPosts,
     getPostsByTagName,
     addTagsToPost,
-    getAllTags
+    getAllTags,
+    getAllUsers
 }
