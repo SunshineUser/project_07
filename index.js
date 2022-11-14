@@ -8,30 +8,30 @@ const app = express();
 
 const morgan = require('morgan')
 app.use(morgan('dev'))
-const jwt = require('jsonwebtoken');
-const { JWT_SECRET } = process.env;
+// const jwt = require('jsonwebtoken');
+// const { JWT_SECRET } = process.env;
 require('dotenv').config();
 app.use(express.json());
-app.use(express.urlencoded( { extended:false }));
+app.use(express.urlencoded({ extended:false }));
 
 //calling the router
 const apiRouter = require('./api');
-app.use('/api', apiRouter);
+app.use ('/api', apiRouter);
 // getUserBy/client from the datatbase
 
 
 // connect to the client before the app.use 
 client.connect();
 // are we here? if yes, then respond
-// app.use('*',(req,res,next)=>{
-//     console.log("we're looking for errors in the API")
-//     next();
-// })
+app.use('*',(req,res,next)=>{
+    console.log("we're looking for errors in the API")
+    next();
+})
 
-// app.use((req,res,next)=>{
-//     console.log("Request has been recieved express!")
-//     next();
-// })
+app.use((req,res,next)=>{
+    console.log("Request has been recieved express!")
+    next();
+})
 
 // this is the first call that will route all calls from ./. on your website 
 app.get('/',(req,res, next)=>{
@@ -44,7 +44,7 @@ app.get('/',(req,res, next)=>{
 
 
 
-//jwt.verify() 2 arguments, what is the token, what is the server-side secret
+// jwt.verify() //2 arguments, what is the token, what is the server-side secret
 // async function decryptJWT(req,res,next){
 //     try{
 //         // console.log("this is req.headers" , req.headers);
@@ -72,7 +72,7 @@ app.get('/',(req,res, next)=>{
 
 
 
-//jwt.sign() create a new json web token 3 arguments, (encryptdata, secret, expiration time ))
+// jwt.sign() //create a new json web token 3 arguments, (encryptdata, secret, expiration time ))
 // app.post("/api/users/register", (req,res,next) =>{
 //     try{
 //         let newUserData = req.body;
