@@ -41,7 +41,13 @@ app.get('/',(req,res, next)=>{
     next();
 })
 
-
+// app.get('/background/:color',(req,res,next)=>{
+//     res.send(`
+//         <body style ="background: ${req.params.color};">
+//         <h1>Hello World</h1>
+//         </body>
+//     `);
+// });
 
 
 

@@ -40,7 +40,7 @@ usersRouter.post('/login', async(req,res,next)=>{
         if (user && user.password == password){
             // create token and return to user
                 const newToken = jwt.sign({
-                    username: username,
+                    username: username
                 }, JWT_SECRET,{
                     expiresIn:"1w"
                 })

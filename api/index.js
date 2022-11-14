@@ -1,40 +1,45 @@
 const express = require('express');
 const apiRouter = express.Router();
-
+const {getUserById, getUserByUsername} = require('../db');
 const jwt = require('jsonwebtoken');
-const {getUserById} = require('../db');
+
 const {JWT_SECRET} = process.env;
 
+const usersRouter = require('./users');
+apiRouter.use('/users', usersRouter);
+const tagsRouter = require('./tags');
+apiRouter.use('./tags',tagsRouter);
+const postsRouter = require('./posts');
+apiRouter.use('/posts', postsRouter);
 
-apiRouter.use(async (req,res,next)=>{
+
+apiRouter.use(async(req,res,next)=>{
     const prefix = 'Bearer ';
-    const auth = req.header('Authorization');
+    const auth = req.headers.authorization;
+    console.log("this is message" + req.headers.authorization);
 
     //go away if you don't have authorization
-    if(!auth){
-        // res.send("invalid credentials")
-        next();
-    } else if(auth.startsWith(prefix)){
-        //slice 8 into the token to only get the token from the bearer
-        const token = auth.slice(prefix.length);
-        // console.log(token);
+    
         try{
-            
-            const { id } = jwt.verify(token, JWT_SECRET);
-            console.log(id)
-            if(id){
-                req.user = await getUserById(id);
+            if(!auth){
+                res.send("invalid credentials")
+                next();
+            } else if(auth.startsWith(prefix)){
+                //slice 8 into the token to only get the token from the bearer
+                const token = auth.slice(7);
+                // console.log(token);
+            const {username} = jwt.verify(token, JWT_SECRET);
+
+            // console.log("is this jason." +jasonInfo.keys())
+            if (username) {
+                req.user = await getUserByUsername(username);
                 next();
             }
+        } 
         } catch({ name, message }){
             next({name, message});
         }
-    } else{
-        next({
-            name: 'AuthorizationHeaderError',
-            message: `Authorization token must start with ${ prefix }`
-        })
-    }
+    
 });
 
 apiRouter.use((req,res,next)=>{
@@ -45,13 +50,8 @@ apiRouter.use((req,res,next)=>{
     next();
 });
 
-const usersRouter = require('./users');
-const postsRouter = require('./posts');
-const tagsRouter = require('./tags');
 
-apiRouter.use('/posts', postsRouter);
-apiRouter.use('/users', usersRouter);
-apiRouter.use('/tags', tagsRouter);
+
 
 apiRouter.use((error, req, res, next)=>{
     res.send({
