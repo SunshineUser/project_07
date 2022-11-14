@@ -27,7 +27,7 @@ apiRouter.use(async(req,res,next)=>{
             } else if(auth.startsWith(prefix)){
                 //slice 8 into the token to only get the token from the bearer
                 const token = auth.slice(7);
-                // console.log(token);
+                console.log(token);
             const {username} = jwt.verify(token, JWT_SECRET);
 
             // console.log("is this jason." +jasonInfo.keys())

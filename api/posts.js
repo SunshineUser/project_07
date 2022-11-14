@@ -6,9 +6,9 @@ const {getAllPosts, createPost, updatePost, getPostById} = require('../db');
 
 postsRouter.post('/', requireUser, async(req,res,next) =>{
     //take the info from the request body and parsing it
-    console.log("this is my reqqin body id " + req.user.id);
+    console.log("this is my reqqin body " + Object.keys(req) +"what "+ Object.keys(req.params));
     const { title, content, tags = ""} = req.body;
-    const authorId = req.user.id;
+    const authorId = req.body.id;
     // this is turning a string of tags into an array of tags through regex magic
     const tagArr = tags.trim().split(/\s+/)
     const postData = {authorId, title, content};
