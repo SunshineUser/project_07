@@ -11,6 +11,7 @@ app.use(morgan('dev'))
 // const jwt = require('jsonwebtoken');
 // const { JWT_SECRET } = process.env;
 require('dotenv').config();
+
 app.use(express.json());
 app.use(express.urlencoded({ extended:false }));
 
