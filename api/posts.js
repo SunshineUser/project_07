@@ -8,7 +8,7 @@ postsRouter.post('/', requireUser, async(req,res,next) =>{
     //take the info from the request body and parsing it
     console.log("this is my reqqin body " + Object.keys(req) +"what "+ Object.keys(req.params));
     const { title, content, tags = ""} = req.body;
-    const authorId = req.body.id;
+    const authorId = req.user.id;
     // this is turning a string of tags into an array of tags through regex magic
     const tagArr = tags.trim().split(/\s+/)
     const postData = {authorId, title, content};
@@ -30,20 +30,14 @@ postsRouter.post('/', requireUser, async(req,res,next) =>{
 postsRouter.patch('/:postId', requireUser, async (req, res, next) => {
     const { postId } = req.params;
     const { title, content, tags } = req.body;
-  
+    console.log(req.user);
     const updateFields = {};
   
-    if (tags && tags.length > 0) {
-      updateFields.tags = tags.trim().split(/\s+/);
-    }
-  
-    if (title) {
-      updateFields.title = title;
-    }
-  
-    if (content) {
-      updateFields.content = content;
-    }
+    if (tags && tags.length > 0) updateFields.tags = tags.trim().split(/\s+/);
+    
+    if (title) updateFields.title = title;
+    
+    if (content) updateFields.content = content;
   
     try {
       const originalPost = await getPostById(postId);

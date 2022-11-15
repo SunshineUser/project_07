@@ -21,9 +21,8 @@ async function createUser({
             INSERT INTO users(username, password, name, location)
             VALUES ($1, $2, $3, $4)  
             ON CONFLICT (username) DO NOTHING 
-            RETURNING *;
-            `,
-            [ username, password, name, location]);
+            RETURNING*;
+            `,[ username, password, name, location]);
         return user
     }catch(error){
         throw (error) //in the trash
