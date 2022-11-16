@@ -31,5 +31,5 @@ async function createUser({
 
 module.exports={
     getAllUsers,
-    createUser
+    createUser,
 }

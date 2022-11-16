@@ -40,8 +40,6 @@ const postsRouter = require('./posts');
 apiRouter.use('/posts', postsRouter);
 
 
-
-
 apiRouter.use((req,res,next)=>{
     if(req.user) console.log("User is set:", req.user);
     next();

@@ -3,8 +3,6 @@ const usersRouter = express.Router();
 const jwt = require('jsonwebtoken');
 const {JWT_SECRET} = process.env;
 
-
-
 //calling get all users, getuserbytusername
 const { getAllUsers, getUserByUsername, createUser } = require('../db/');
 
@@ -42,7 +40,6 @@ usersRouter.post('/login', async(req,res,next)=>{
                 const newToken = jwt.sign({
                     username: username,
                     id: user.id
-                    
                 }, JWT_SECRET,{
                     expiresIn:"1w"
                 })

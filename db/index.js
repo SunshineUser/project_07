@@ -1,5 +1,5 @@
 const { Client } = require('pg');
-const client = new Client('postgres://localhost:5432/juicebox-dev')
+const client = new pg.Client(process.env.DB_URL || postgres://localhost:5432/localDBName)
 
 async function getAllUsers(){
     const { rows } = await client.query(
@@ -45,7 +45,6 @@ async function updateUser(id, fields = {}){
         //interpolated insert that allows the method chain to send an object value into sql
         (key, index) => `"${ key }"=$${ index + 1}`
         ).join(', ');
-
     if (setString.length === 0){
         return;
     }
