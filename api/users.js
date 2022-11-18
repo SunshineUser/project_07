@@ -6,13 +6,14 @@ const {JWT_SECRET} = process.env;
 //calling get all users, getuserbytusername
 const { getAllUsers, getUserByUsername, createUser } = require('../db/');
 
+
 usersRouter.use((req,res,next) =>{
     console.log("a request is being made to /users");
 
     // res.send({ message: 'hello from /users!'})
     next()
 })
-
+// /users
 usersRouter.get('/', async(req,res) =>{
     const users = await getAllUsers();
 
@@ -20,7 +21,7 @@ usersRouter.get('/', async(req,res) =>{
         users
     });
 });
-
+  // /users/login
 usersRouter.post('/login', async(req,res,next)=>{
     const { username, password } =req.body;
 

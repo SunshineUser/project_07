@@ -1,5 +1,13 @@
-// const { Client } = require('pg');
-const client = new pg.Client(process.env.DB_URL || "postgres://localhost:5432/localDBName")
+const { Client } = require('pg');
+const client = new Client({
+    host: process.env.DB_HOSTNAME || "localhost",
+    port: process.env.DB_PORT || 5432,
+    database: process.env.DB_NAME || "juicebox-dev",
+    username: process.env.DB_USERNAME || undefined,
+    password: process.env.DB_PASSWORD || undefined,
+    connectionString: process.env.DB_URL || 'postgres://localhost:5432/juicebox-dev',
+    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined,
+  });
 
 async function getAllUsers(){
     const { rows } = await client.query(
@@ -18,6 +26,15 @@ async function getAllTags(){
     return rows;
 }
 
+async function getAllUsers(){
+    const { rows } = await client.query(
+        `SELECT id, username, name, location, active
+        FROM users;
+        `);
+        console.log("all users", rows);
+    return rows;
+}
+
 async function createUser({
     username,
     password,
@@ -28,22 +45,24 @@ async function createUser({
         const { rows:  [ user ] } = await client.query(`
             INSERT INTO users(username, password, name, location)
             VALUES ($1, $2, $3, $4)  
-            ON CONFLICT (username) DO NOTHING 
+            ON CONFLICT (username) DO NOTHING
             RETURNING *;
             `,
             [ username, password, name, location]);
+        console.log(user, "we are inside the function");
         return user
     }catch(error){
         throw (error) //in the trash
     }
 }
-
+     ////                 (id), fields={vin= 235425321456,color=blue}
 async function updateUser(id, fields = {}){
     console.log("updating users....")
-    const setString = Object.keys(fields).map(
-
-        //interpolated insert that allows the method chain to send an object value into sql
-        (key, index) => `"${ key }"=$${ index + 1}`
+    const setString = Object.keys(fields)
+    .map( (key, index) => 
+    
+    
+    `"${ key }"=$${ index + 1}`  // ($1, $2, $3)
         ).join(', ');
     if (setString.length === 0){
         return;
@@ -58,7 +77,7 @@ async function updateUser(id, fields = {}){
             console.log("Result:", user);
         return user;
     }catch (error){
-        throw error;
+        console.log(error);
     }
 }
 

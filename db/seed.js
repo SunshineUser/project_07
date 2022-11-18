@@ -8,12 +8,9 @@ const {
     createTags,
     addTagsToPost,
     getPostsByTagName,
-} = require('./index');
-
-const{
     createUser,
     getAllUsers
-} = require('./user');
+} = require('./index');
 
 async function createInitialPosts(){
     try{
@@ -49,16 +46,16 @@ async function createInitialPosts(){
 }
 async function createInitialUsers(){
     try{
-        // console.log("Starting to create users...");
+        console.log("Starting to create users...");
 
         const albert = await createUser({ username: 'albert', password: 'bertie99', name: 'albert', location:'friday'});
-        const sandra = await createUser({ username:'sandra', password: 'passwordsarebad',name: 'sandra',location: 'at a bar' });
+        const sandra = await createUser({ username:'sandra', password: 'passwordsarebad',name: 'sandra', location: 'at a bar' });
         const glamgal = await createUser({ username:'glamgal', password: 'glamgalmanderglamgal',name: 'glamgal', location: 'under the stairs'});
-        const glamgalf = await createUser ({ username: 'glamgalf the glam'})
-        // console.log(albert);
-        // console.log(sandra);
-        // console.log(glamgal);
-        // console.log("Finished creating users!");
+        // const glamgalf = await createUser ({ username: 'glamgalf the glam'})
+        console.log(albert);
+        console.log(sandra);
+        console.log(glamgal);
+        console.log("Finished creating users!");
 
     } catch(error){
         console.error("Error creating users!")
@@ -156,6 +153,7 @@ async function rebuildDB(){
         await dropTables();
         await createTables();
         await createInitialUsers();
+        console.log("finished creating initial users.")
         await createInitialPosts();
         await testDB();
     } catch(error){

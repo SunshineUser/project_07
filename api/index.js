@@ -4,6 +4,8 @@ const {getUserById, getUserByUsername} = require('../db');
 const jwt = require('jsonwebtoken');
 
 const {JWT_SECRET} = process.env;
+
+
 apiRouter.use(async(req,res,next)=>{
     const prefix = 'Bearer ';
     console.log(req.headers);
@@ -14,7 +16,7 @@ apiRouter.use(async(req,res,next)=>{
         try{
             if(auth && auth.startsWith(prefix)){
                 //slice 8 into the token to only get the token from the bearer
-                const token = auth.slice(7);
+                const token = auth.slice(prefix);
                 console.log(token);
             const {username, id} = jwt.verify(token, JWT_SECRET);
             console.log(username +"   "+ id);
@@ -31,15 +33,17 @@ apiRouter.use(async(req,res,next)=>{
         }
     
 });
-
+//users/
 const usersRouter = require('./users');
 apiRouter.use('/users', usersRouter);
+//tags/
 const tagsRouter = require('./tags');
 apiRouter.use('./tags',tagsRouter);
+//posts/
 const postsRouter = require('./posts');
 apiRouter.use('/posts', postsRouter);
 
-
+// "/"
 apiRouter.use((req,res,next)=>{
     if(req.user) console.log("User is set:", req.user);
     next();
